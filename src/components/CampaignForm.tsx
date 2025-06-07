@@ -1,6 +1,6 @@
 // components/CampaignForm.tsx
 import { useState } from "react";
-import type { CampaignInput, CampaignSize } from "../types/Campaign";
+import type { CampaignInput } from "../types/Campaign";
 
 interface Props {
   onSubmit: (data: CampaignInput) => void;
@@ -8,7 +8,7 @@ interface Props {
 
 const CampaignForm = ({ onSubmit }: Props) => {
   const [genre, setGenre] = useState("");
-  const [size, setSize] = useState<CampaignSize>("medium");
+  const [length, setLength] = useState<number>(1);
   const [beats, setBeats] = useState<string[]>([""]);
   
   const handleChangeBeat = (index: number, value: string) => {
@@ -23,7 +23,7 @@ const CampaignForm = ({ onSubmit }: Props) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ genre, size, beats: beats.filter(b => b.trim()) });
+    onSubmit({ genre, length, beats: beats.filter(b => b.trim()) });
   };
 
   return (
@@ -42,16 +42,16 @@ const CampaignForm = ({ onSubmit }: Props) => {
       </label>
 
       <label className="block">
-        Size:
-        <select
-          value={size}
-          onChange={(e) => setSize(e.target.value as "short" | "medium" | "long")}
+        Campaign Length (number of sessions):
+        <input
+          type="number"
+          value={length}
+          min={1}
+          max={100}
+          onChange={(e) => setLength(parseInt(e.target.value))}
           className="w-full border p-2 rounded"
-        >
-          <option value="short">Short (3–4 sessions)</option>
-          <option value="medium">Medium (5–8 sessions)</option>
-          <option value="long">Long (10+ sessions)</option>
-        </select>
+          required
+        />
       </label>
 
       <div>

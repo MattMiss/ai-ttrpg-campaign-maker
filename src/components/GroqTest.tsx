@@ -1,21 +1,21 @@
 import { useState } from "react";
-import { groqTest } from "../groqService";
+import { getCampaignResponse } from "../api/groqService";
+import type { CampaignInput } from "../types/Campaign";
 
-const GroqComponent = () => {
+const GroqComponent = (campaignInput: CampaignInput) => {
   const [response, setResponse] = useState("");
   const [isThinking, setIsThinking] = useState(false);
 
   const handleGetGroqResponse = async () => {
     try {
       setIsThinking(true);
-      const result = await groqTest();   
+      const result = await getCampaignResponse(campaignInput);   
       setResponse(result);
     }catch (error) {
       console.log(error);
     }finally {
       setIsThinking(false);
-    }
-    
+    }   
   }
 
   return (

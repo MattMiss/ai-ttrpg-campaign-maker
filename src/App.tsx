@@ -1,24 +1,20 @@
 // App.tsx
-import { useEffect, useState } from "react";
 import CampaignForm from "./components/CampaignForm";
-import type { CampaignInput } from "./types/Campaign";
+import CampaignViewer from "./components/CampaignViewer";
+import { useCampaign } from "./context/CampaignContext";
 
 const App = () => {
-  const [campaignData, setCampaignData] = useState<CampaignInput | null>(null);
-
-  useEffect(() => {
-    console.log(campaignData);
-  }, [campaignData])
+  const { generateCampaign, loading, error, campaignResult } = useCampaign();
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      {!campaignData ? (
-        <CampaignForm onSubmit={setCampaignData} />
+     <div className="p-6 max-w-3xl mx-auto">
+      {!campaignResult ? (
+        <CampaignForm onSubmit={generateCampaign} />
       ) : (
-        <pre className="bg-white p-4 rounded shadow whitespace-pre-wrap">
-          {JSON.stringify(campaignData, null, 2)}
-        </pre>
+        <CampaignViewer />
       )}
+      {loading && <p className="text-blue-600 mt-4">Generating campaign...</p>}
+      {error && <p className="text-red-600 mt-4">{error}</p>}
     </div>
   );
 };
