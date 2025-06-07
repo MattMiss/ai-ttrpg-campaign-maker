@@ -27,7 +27,7 @@ const CampaignForm = ({ onSubmit }: Props) => {
   };
 
   return (
-    <form className="space-y-4 p-4 max-w-xl" onSubmit={handleSubmit}>
+    <form className="bg-white rounded-xl space-y-4 p-4 max-w-xl" onSubmit={handleSubmit}>
       <h2 className="text-xl font-bold">Create New Campaign</h2>
 
       <label className="block">
