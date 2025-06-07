@@ -1,31 +1,26 @@
-import { useState } from "react";
-import { groqTest } from "./groqService";
+// App.tsx
+import { useEffect, useState } from "react";
+import CampaignForm from "./components/CampaignForm";
+import type { CampaignInput } from "./types/Campaign";
 
-const GroqComponent = () => {
-  const [response, setResponse] = useState("");
-  const [isThinking, setIsThinking] = useState(false);
+const App = () => {
+  const [campaignData, setCampaignData] = useState<CampaignInput | null>(null);
 
-  const handleGetGroqResponse = async () => {
-    try {
-      setIsThinking(true);
-      const result = await groqTest();   
-      setResponse(result);
-    }catch (error) {
-      console.log(error);
-    }finally {
-      setIsThinking(false);
-    }
-    
-  }
+  useEffect(() => {
+    console.log(campaignData);
+  }, [campaignData])
 
   return (
-    <div className="p-4">
-      <button onClick={handleGetGroqResponse}>Get Response</button>
-      <h1 className="text-xl font-bold">Groq Response:</h1>
-      {isThinking && <p>Thinking...</p>}
-      {!isThinking && <pre className="mt-2 whitespace-pre-wrap">{response}</pre>}
+    <div className="min-h-screen bg-gray-100 p-8">
+      {!campaignData ? (
+        <CampaignForm onSubmit={setCampaignData} />
+      ) : (
+        <pre className="bg-white p-4 rounded shadow whitespace-pre-wrap">
+          {JSON.stringify(campaignData, null, 2)}
+        </pre>
+      )}
     </div>
   );
 };
 
-export default GroqComponent;
+export default App;
