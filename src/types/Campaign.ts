@@ -42,6 +42,7 @@ export interface CampaignNPC {
 }
 
 export interface CampaignResult {
+  id: string;
   title: string;
   summary: string;
   sessions: CampaignSession[];

@@ -1,4 +1,5 @@
 // App.tsx
+import CampaignSelector from "./components/CampaignDropdown";
 import CampaignForm from "./components/CampaignForm";
 import CampaignViewer from "./components/CampaignViewer";
 import { useCampaign } from "./context/CampaignContext";
@@ -9,6 +10,7 @@ const App = () => {
 
     return (
         <div className="p-6 max-w-3xl mx-auto">
+            <CampaignSelector />
             {!campaignResult ? (
                 <CampaignForm onSubmit={generateCampaign} />
             ) : (
