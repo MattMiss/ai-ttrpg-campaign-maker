@@ -61,15 +61,6 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
         }
     }, []);
 
-    // useEffect(() => {
-    //     if (input) localStorage.setItem("campaignInput", JSON.stringify(input));
-    //     if (campaignResult)
-    //         localStorage.setItem(
-    //             "campaignResult",
-    //             JSON.stringify(campaignResult)
-    //         );
-    // }, [input, campaignResult]);
-
     const generateCampaign = async (inputData: CampaignInput) => {
         setLoading(true);
         setError(null);
@@ -118,10 +109,22 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const clearCampaign = () => {
-        setInput(null);
+        if (!selectedId) return;
+
+        // Remove the specific campaign from localStorage
+        localStorage.removeItem(`campaign_${selectedId}`);
+
+        // Update the stored ID list
+        const updatedCampaigns = campaigns.filter((c) => c.id !== selectedId);
+        setCampaigns(updatedCampaigns);
+
+        const updatedIds = updatedCampaigns.map((c) => c.id);
+        localStorage.setItem("campaigns", JSON.stringify(updatedIds));
+
+        // Clear current selection
+        setSelectedId(null);
         setCampaignResult(null);
-        localStorage.removeItem("campaignInput");
-        localStorage.removeItem("campaignResult");
+        localStorage.removeItem("selectedCampaignId");
     };
 
     return (
