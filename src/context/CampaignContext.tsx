@@ -1,7 +1,8 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import type { CampaignInput, CampaignResult } from "../types/Campaign";
-import { getCampaignFromGroq } from "../api/groqService";
+import { getCampaignFromGroq, getNpcEditFromGroq } from "../api/groqService";
 import { CAMPAIGN_DATA_KEY, CAMPAIGN_LIST_KEY } from "../utils/storage.helper";
+import { mergeCampaignUpdate } from "../utils/campign.helper";
 
 interface CampaignContextValue {
     input: CampaignInput | null;
@@ -13,6 +14,7 @@ interface CampaignContextValue {
     selectCampaign: (id: string) => void;
     generateCampaign: (input: CampaignInput) => Promise<void>;
     clearCampaign: () => void;
+    handleNpcChange: (npcId: string, instruction: string) => void;
 }
 
 const CampaignContext = createContext<CampaignContextValue | undefined>(
@@ -106,6 +108,7 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
             setCampaignResult(campaign);
             localStorage.setItem("selectedCampaignId", id);
         }
+        console.log(campaign)
     };
 
     const clearCampaign = () => {
@@ -127,6 +130,22 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem("selectedCampaignId");
     };
 
+    const handleNpcChange = async (npcId: string, instruction: string) => {
+        if (!campaignResult) return;
+
+        const update = await getNpcEditFromGroq(
+            campaignResult,
+            npcId,
+            instruction
+        ); // You parse updated sessions/npcs here
+        console.log(update);
+        const merged = mergeCampaignUpdate(campaignResult, update);
+        setCampaignResult(merged);
+
+        // Save to localStorage
+        localStorage.setItem(`campaign_${merged.id}`, JSON.stringify(merged));
+    };
+
     return (
         <CampaignContext.Provider
             value={{
@@ -139,6 +158,7 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
                 campaigns,
                 selectedId,
                 selectCampaign,
+                handleNpcChange
             }}
         >
             {children}
