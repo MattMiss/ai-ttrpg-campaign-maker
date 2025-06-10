@@ -1,7 +1,7 @@
 import type { CampaignInput, CampaignResult } from "../types/Campaign";
 
 export const generateCampaignPrompt = (input: CampaignInput): string => {
-  return `
+    return `
 Create a TTRPG campaign in the ${input.genre} genre.
 
 The campaign should be ${input.length} sessions long.
@@ -22,7 +22,6 @@ Respond in JSON format with:
 }
   `.trim();
 };
-
 
 export const generateNpcEditPrompt = (
     campaign: CampaignResult,
