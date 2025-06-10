@@ -50,3 +50,31 @@ Return only updated sessions and NPCs in valid JSON format:
 }
 `.trim();
 };
+
+export const generateSessionEditPrompt = (
+    campaign: CampaignResult,
+    sessionId: string,
+    instruction: string
+): string => {
+    const jsonCampaign = JSON.stringify(campaign, null, 2);
+
+    return `
+You are an AI campaign editor for a TTRPG.
+
+Below is the full campaign data:
+${jsonCampaign}
+
+Focus on the session with ID "${sessionId}".
+
+Instruction:
+${instruction}
+
+Make necessary changes to that session and adjust any related NPCs if needed. Maintain continuity in the overall story.
+
+Return only updated sessions and NPCs in valid JSON format:
+{
+  "sessions": [ ... updated session only ... ],
+  "npcs": [ ... any affected NPCs ... ]
+}
+`.trim();
+};

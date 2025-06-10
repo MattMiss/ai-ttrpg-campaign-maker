@@ -5,7 +5,7 @@ import type {
     CampaignSession,
     CampaignNPC,
 } from "../types/Campaign";
-import { generateCampaignPrompt, generateNpcEditPrompt } from "./aiPrompts";
+import { generateCampaignPrompt, generateNpcEditPrompt, generateSessionEditPrompt } from "./aiPrompts";
 
 const groq = new Groq({
     apiKey: import.meta.env.VITE_GROQ_API_KEY,
@@ -64,5 +64,35 @@ export const getNpcEditFromGroq = async (
         return JSON.parse(text);
     } catch {
         throw new Error("AI returned invalid JSON for NPC edit.");
+    }
+};
+
+// Generate an NPC edit from a natural language instruction and full campaign data
+export const getSessionEditFromGroq = async (
+    campaign: CampaignResult,
+    sessionId: string,
+    instruction: string
+): Promise<{
+    sessions?: CampaignSession[];
+    npcs?: CampaignNPC[];
+}> => {
+    const prompt = generateSessionEditPrompt(campaign, sessionId, instruction);
+
+    const completion = await groq.chat.completions.create({
+        model: "llama-3.3-70b-versatile",
+        messages: [{ role: "user", content: prompt }],
+    });
+
+    let text = completion.choices[0]?.message?.content ?? "";
+    console.log("[Session Edit Response]", text);
+
+    if (text.startsWith("```json") || text.startsWith("```")) {
+        text = text.replace(/^```json|^```|```$/g, "").trim();
+    }
+
+    try {
+        return JSON.parse(text);
+    } catch {
+        throw new Error("AI returned invalid JSON for Session edit.");
     }
 };

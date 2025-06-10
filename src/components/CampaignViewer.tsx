@@ -3,11 +3,12 @@ import { useState } from "react";
 import { useCampaign } from "../context/CampaignContext";
 import type { CampaignSession, CampaignNPC } from "../types/Campaign";
 import NpcEditModal from "./NpcEditModal";
+import SessionEditModal from "./SessionEditModal";
 
 const CampaignViewer = () => {
     const { campaignResult } = useCampaign();
 	const [editingNpc, setEditingNpc] = useState<CampaignNPC | null>(null);
-    //const [editingSession, setEditingSession] = useState<CampaignSession | null>(null);
+    const [editingSession, setEditingSession] = useState<CampaignSession | null>(null);
 
     if (!campaignResult) return null;
 
@@ -26,11 +27,19 @@ const CampaignViewer = () => {
                     {campaignResult.sessions.map((session: CampaignSession) => (
                         <div
                             key={session.id}
-                            className="border-l-4 border-blue-500 pl-4"
+                            className="border border-2 border-gray-400 p-3 rounded"
                         >
-                            <h4 className="text-xl font-bold">
-                                Session {session.number}: {session.title}
-                            </h4>
+                            <div className="flex justify-between">
+                                <h4 className="text-xl font-bold">
+                                    Session {session.number}: {session.title}
+                                </h4>
+                                <button
+                                    onClick={() => setEditingSession(session)}
+                                    className="px-4 py-1 bg-purple-600 text-white rounded"
+                                >
+                                    Edit
+                                </button>
+                            </div>
                             <p className="text-gray-700 mb-1">
                                 {session.summary}
                             </p>
@@ -72,7 +81,10 @@ const CampaignViewer = () => {
                 <h3 className="text-2xl font-semibold mb-4">NPCs</h3>
                 <ul className="space-y-4">
                     {campaignResult.npcs.map((npc: CampaignNPC) => (
-                        <li key={npc.id} className="border p-3 rounded">
+                        <li
+                            key={npc.id}
+                            className="border border-2 border-gray-400 p-3 rounded"
+                        >
                             <div className="flex justify-between">
                                 <p className="text-lg font-bold">
                                     {npc.name} ({npc.role})
@@ -114,6 +126,13 @@ const CampaignViewer = () => {
                 <NpcEditModal
                     npc={editingNpc}
                     onClose={() => setEditingNpc(null)}
+                />
+            )}
+
+            {editingSession && (
+                <SessionEditModal
+                    session={editingSession}
+                    onClose={() => setEditingSession(null)}
                 />
             )}
         </div>

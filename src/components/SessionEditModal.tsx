@@ -1,54 +1,66 @@
-// components/SessionEditModal.tsx
 import { useState } from "react";
+import { useCampaign } from "../context/CampaignContext";
 import type { CampaignSession } from "../types/Campaign";
 
 interface Props {
     session: CampaignSession;
-    onSave: (updated: CampaignSession) => void;
     onClose: () => void;
 }
 
-const SessionEditModal = ({ session, onSave, onClose }: Props) => {
-    const [summary, setSummary] = useState(session.summary);
-    const [events, setEvents] = useState(session.events.join("\n"));
+const SessionEditModal = ({ session, onClose }: Props) => {
+    const { handleSessionChange } = useCampaign();
+    const [instruction, setInstruction] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleSave = () => {
-        const updated = {
-            ...session,
-            summary,
-            events: events
-                .split("\n")
-                .map((e) => e.trim())
-                .filter(Boolean),
-        };
-        onSave(updated);
-        onClose();
+    const handleSubmit = async () => {
+        if (!instruction.trim()) return;
+        setLoading(true);
+        setError(null);
+
+        try {
+            await handleSessionChange(session.id, instruction);
+            onClose();
+        } catch (err) {
+            console.error(err);
+            setError("Failed to apply AI edit.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-lg w-full max-w-xl shadow-lg space-y-4">
+            <div className="bg-white p-6 rounded-lg w-full max-w-xl shadow space-y-4">
                 <h2 className="text-xl font-bold">
-                    Edit Session {session.number}: {session.title}
+                    Edit for Session {session.number}: {session.title}
                 </h2>
 
-                <label className="block">
-                    Summary:
+                <p className="text-gray-700">{session.summary}</p>
+
+                <div>
+                    <strong className="block text-sm text-gray-600 mt-2">
+                        Events:
+                    </strong>
+                    <ul className="list-disc list-inside text-sm text-gray-800 mt-1">
+                        {session.events.map((event, i) => (
+                            <li key={i}>{event}</li>
+                        ))}
+                    </ul>
+                </div>
+
+                <label className="block mt-4">
+                    <strong>Instruction for AI:</strong>
                     <textarea
-                        value={summary}
-                        onChange={(e) => setSummary(e.target.value)}
+                        value={instruction}
+                        onChange={(e) => setInstruction(e.target.value)}
+                        placeholder="e.g. Change this session to introduce an alien diplomat"
                         className="w-full border p-2 mt-1"
+                        rows={4}
                     />
                 </label>
 
-                <label className="block">
-                    Events (one per line):
-                    <textarea
-                        value={events}
-                        onChange={(e) => setEvents(e.target.value)}
-                        className="w-full border p-2 mt-1"
-                    />
-                </label>
+                {error && <p className="text-red-600 text-sm">{error}</p>}
 
                 <div className="flex justify-end gap-3">
                     <button
@@ -58,10 +70,11 @@ const SessionEditModal = ({ session, onSave, onClose }: Props) => {
                         Cancel
                     </button>
                     <button
-                        onClick={handleSave}
-                        className="px-4 py-2 bg-blue-600 text-white rounded"
+                        onClick={handleSubmit}
+                        disabled={loading}
+                        className="px-4 py-2 bg-purple-600 text-white rounded disabled:opacity-50"
                     >
-                        Save Changes
+                        {loading ? "Submitting..." : "Apply AI Edit"}
                     </button>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import type { CampaignInput, CampaignResult } from "../types/Campaign";
-import { getCampaignFromGroq, getNpcEditFromGroq } from "../api/groqService";
+import { getCampaignFromGroq, getNpcEditFromGroq, getSessionEditFromGroq } from "../api/groqService";
 import { CAMPAIGN_DATA_KEY, CAMPAIGN_LIST_KEY } from "../utils/storage.helper";
 import { mergeCampaignUpdate } from "../utils/campign.helper";
 
@@ -15,6 +15,7 @@ interface CampaignContextValue {
     generateCampaign: (input: CampaignInput) => Promise<void>;
     clearCampaign: () => void;
     handleNpcChange: (npcId: string, instruction: string) => void;
+    handleSessionChange: (sessionId: string, instruction: string) => void;
 }
 
 const CampaignContext = createContext<CampaignContextValue | undefined>(
@@ -146,6 +147,22 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem(`campaign_${merged.id}`, JSON.stringify(merged));
     };
 
+    const handleSessionChange = async (
+        sessionId: string,
+        instruction: string
+    ) => {
+        if (!campaignResult) return;
+
+        const update = await getSessionEditFromGroq(
+            campaignResult,
+            sessionId,
+            instruction
+        );
+        const merged = mergeCampaignUpdate(campaignResult, update);
+        setCampaignResult(merged);
+        localStorage.setItem(`campaign_${merged.id}`, JSON.stringify(merged));
+    };
+
     return (
         <CampaignContext.Provider
             value={{
@@ -158,7 +175,8 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
                 campaigns,
                 selectedId,
                 selectCampaign,
-                handleNpcChange
+                handleNpcChange,
+                handleSessionChange
             }}
         >
             {children}
