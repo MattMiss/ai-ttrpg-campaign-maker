@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from "
 import type { CampaignInput, CampaignResult } from "../types/Campaign";
 import { getCampaignFromGroq, getNpcEditFromGroq, getSessionEditFromGroq } from "../api/groqService";
 import { CAMPAIGN_DATA_KEY, CAMPAIGN_LIST_KEY } from "../utils/storage.helper";
-import { mergeCampaignUpdate } from "../utils/campign.helper";
+import { mergeCampaignUpdate } from "../utils/campaign.helper";
 
 interface CampaignContextValue {
     input: CampaignInput | null;
