@@ -7,6 +7,7 @@ import {
 } from "react";
 import type { CampaignInput, CampaignResult } from "../types/Campaign";
 import {
+    addNewSessionWithGroq,
     getCampaignFromGroq,
     getNpcEditFromGroq,
     getSessionEditFromGroq,
@@ -30,6 +31,7 @@ interface CampaignContextValue {
     handleTitleSummaryUpdate: (newTitle: string, newSummary: string) => void;
     handleNpcChange: (npcId: string, instruction: string) => void;
     handleSessionChange: (sessionId: string, instruction: string) => void;
+    handleAddSession: (anchorSessionId: string, instruction: string, position: "before" | "after") => void;
 }
 
 const CampaignContext = createContext<CampaignContextValue | undefined>(
@@ -207,6 +209,24 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem(`campaign_${merged.id}`, JSON.stringify(merged));
     };
 
+    const handleAddSession = async (
+        anchorSessionId: string,
+        instruction: string,
+        position: "before" | "after"
+    ) => {
+        if (!campaignResult) return;
+
+        const update = await addNewSessionWithGroq(
+            campaignResult,
+            anchorSessionId,
+            instruction,
+            position
+        );
+        const merged = mergeCampaignUpdate(campaignResult, update);
+        setCampaignResult(merged);
+        localStorage.setItem(`campaign_${merged.id}`, JSON.stringify(merged));
+    };
+
     return (
         <CampaignContext.Provider
             value={{
@@ -222,6 +242,7 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
                 handleTitleSummaryUpdate,
                 handleNpcChange,
                 handleSessionChange,
+                handleAddSession,
             }}
         >
             {children}

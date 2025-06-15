@@ -13,15 +13,14 @@ interface PartialUpdate {
 
 export const mergeCampaignUpdate = (
     original: CampaignResult,
-    update: PartialUpdate
+    update: PartialUpdate & { deletedSessionIds?: string[] }
 ): CampaignResult => {
-    // Replace or keep original sessions
     const sessionMap = new Map<string, CampaignSession>(
         original.sessions.map((s) => [s.id, s])
     );
     update.sessions?.forEach((s) => sessionMap.set(s.id, s));
+    update.deletedSessionIds?.forEach((id) => sessionMap.delete(id));
 
-    // Replace or keep original NPCs
     const npcMap = new Map<string, CampaignNPC>(
         original.npcs.map((n) => [n.id, n])
     );

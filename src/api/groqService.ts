@@ -5,7 +5,7 @@ import type {
     CampaignSession,
     CampaignNPC,
 } from "../types/Campaign";
-import { generateCampaignPrompt, generateNpcEditPrompt, generateSessionEditPrompt } from "./aiPrompts";
+import { generateAddSessionPrompt, generateCampaignPrompt, generateNpcEditPrompt, generateSessionEditPrompt } from "./aiPrompts";
 
 const groq = new Groq({
     apiKey: import.meta.env.VITE_GROQ_API_KEY,
@@ -94,5 +94,40 @@ export const getSessionEditFromGroq = async (
         return JSON.parse(text);
     } catch {
         throw new Error("AI returned invalid JSON for Session edit.");
+    }
+};
+
+export const addNewSessionWithGroq = async (
+    campaign: CampaignResult,
+    anchorSessionId: string,
+    instruction: string,
+    position: "before" | "after"
+): Promise<{
+    sessions?: CampaignSession[];
+    npcs?: CampaignNPC[];
+}> => {
+    const prompt = generateAddSessionPrompt(
+        campaign,
+        anchorSessionId,
+        instruction,
+        position
+    );
+
+    const completion = await groq.chat.completions.create({
+        model: "llama-3.3-70b-versatile",
+        messages: [{ role: "user", content: prompt }],
+    });
+
+    let text = completion.choices[0]?.message?.content ?? "";
+    console.log("[Add Session Response]", text);
+
+    if (text.startsWith("```json") || text.startsWith("```")) {
+        text = text.replace(/^```json|^```|```$/g, "").trim();
+    }
+
+    try {
+        return JSON.parse(text);
+    } catch {
+        throw new Error("AI returned invalid JSON for Add Session.");
     }
 };

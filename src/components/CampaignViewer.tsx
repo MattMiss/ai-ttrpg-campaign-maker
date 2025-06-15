@@ -8,11 +8,13 @@ import { downloadTextFile } from "../utils/data.helper";
 import DeleteCampaignModal from "./modals/DeleteCampaignModal";
 import DownloadCampaignModal from "./modals/DownloadCampaignModal";
 import EditTitleAndSummaryModal from "./modals/EditTitleAndSummaryModal";
+import AddSessionModal from "./modals/AddSessionModal";
 
 const CampaignViewer = () => {
     const { campaignResult, deleteCampaign, handleTitleSummaryUpdate } = useCampaign();
 	const [editingNpc, setEditingNpc] = useState<CampaignNPC | null>(null);
     const [editingSession, setEditingSession] = useState<CampaignSession | null>(null);
+    const [showAddSessionModal, setShowAddSessionModal] = useState<boolean>(false);
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
     const [showDownloadModal, setShowDownloadModal] = useState<boolean>(false);
     const [showEditTitleSummaryModal, setShowEditTitleSummaryModal] = useState<boolean>(false)
@@ -62,7 +64,15 @@ const CampaignViewer = () => {
             </div>
 
             <div className="bg-white p-4 rounded shadow">
-                <h3 className="text-2xl font-semibold mb-4">Sessions</h3>
+                <div className="flex justify-between items-center">
+                    <h3 className="text-2xl font-semibold mb-4">Sessions</h3>
+                    <button
+                        onClick={() => setShowAddSessionModal(true)}
+                        className="px-4 py-1 bg-purple-600 text-white rounded"
+                    >
+                        Add Session
+                    </button>
+                </div>
                 <div className="space-y-6">
                     {campaignResult.sessions.map((session: CampaignSession) => (
                         <div
@@ -231,6 +241,13 @@ const CampaignViewer = () => {
                 <SessionEditModal
                     session={editingSession}
                     onClose={() => setEditingSession(null)}
+                />
+            )}
+
+            {showAddSessionModal && (
+                <AddSessionModal
+                    sessions={campaignResult.sessions}
+                    onClose={() => setShowAddSessionModal(false)}
                 />
             )}
 
