@@ -47,13 +47,19 @@ ${npcText}
 `.trim();
 };
 
-export const downloadTextFile = (content: string, filename: string) => {
+export const downloadTextFile = (campaign: CampaignResult) => {
+    const defaultName = `${campaign.title}.txt`;
+    const filename = prompt("Enter a filename:", defaultName);
+
+    if (!filename) return; // User cancelled
+
+    const content = formatCampaignToText(campaign);
     const blob = new Blob([content], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement("a");
     link.href = url;
-    link.download = filename;
+    link.download = filename.endsWith(".txt") ? filename : `${filename}.txt`;
     link.click();
 
     URL.revokeObjectURL(url);

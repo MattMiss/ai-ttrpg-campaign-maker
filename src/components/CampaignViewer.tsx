@@ -4,7 +4,7 @@ import { useCampaign } from "../context/CampaignContext";
 import type { CampaignSession, CampaignNPC } from "../types/Campaign";
 import NpcEditModal from "./NpcEditModal";
 import SessionEditModal from "./SessionEditModal";
-import { downloadTextFile, formatCampaignToText } from "../utils/data.helper";
+import { downloadTextFile } from "../utils/data.helper";
 
 const CampaignViewer = () => {
     const { campaignResult } = useCampaign();
@@ -124,15 +124,10 @@ const CampaignViewer = () => {
             </div>
 
             <button
-                onClick={() =>
-                    downloadTextFile(
-                        formatCampaignToText(campaignResult),
-                        `${campaignResult.title}.txt`
-                    )
-                }
+                onClick={() => downloadTextFile(campaignResult)}
                 className="bg-blue-600 text-white px-4 py-2 rounded"
             >
-                Download as Text
+                Download Campaign Text File
             </button>
 
             {editingNpc && (
