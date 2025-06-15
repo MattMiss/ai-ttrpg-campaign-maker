@@ -13,7 +13,7 @@ const ModalContainer = ({onBGClicked, children}: ModalProps) => {
         >
             <div
                 onClick={(e) => e.stopPropagation()}
-                className="bg-white p-6 rounded-lg w-full max-w-lg shadow"
+                className="bg-white p-6 rounded-lg w-full max-w-[90%] md:max-w-3xl max-h-[90vh] overflow-y-auto shadow"
             >
                 {children}
             </div>

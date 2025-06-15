@@ -46,7 +46,7 @@ const App = () => {
                 )}
 
                 {view === "view" && (
-                    <>
+                    <div className="mt-20 ">
                         <CampaignSelector />
                         {campaignResult ? (
                             <CampaignViewer />
@@ -55,7 +55,7 @@ const App = () => {
                                 No campaign selected.
                             </p>
                         )}
-                    </>
+                    </div>
                 )}
             </div>
         </>

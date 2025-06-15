@@ -84,7 +84,7 @@ const AddSessionModal = ({ sessions, onClose }: Props) => {
             <div className="flex justify-end gap-3">
                 <button
                     onClick={onClose}
-                    className="bg-gray-300 dark:bg-gray-600 px-4 py-2 rounded text-black dark:text-white"
+                    className="bg-gray-600 px-4 py-2 rounded text-white"
                 >
                     Cancel
                 </button>

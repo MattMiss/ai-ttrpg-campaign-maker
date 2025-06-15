@@ -13,7 +13,7 @@ const Navbar = ({ currentView, onChangeView }: Props) => {
             : "bg-gray-700 text-white hover:bg-gray-600";
 
     return (
-        <nav className="bg-gray-900 text-white px-4 py-3 flex justify-between items-center">
+        <nav className="fixed w-full bg-gray-900 text-white px-4 py-3 flex justify-between items-center">
             <h1 className="text-xl font-bold">🎲 TTRPG Campaign Maker</h1>
             <div className="flex space-x-3">
                 <button

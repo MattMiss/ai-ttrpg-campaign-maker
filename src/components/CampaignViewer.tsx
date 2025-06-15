@@ -71,7 +71,7 @@ const CampaignViewer = () => {
                     <h3 className="text-2xl font-semibold mb-4">Sessions</h3>
                     <button
                         onClick={() => setShowAddSessionModal(true)}
-                        className="px-4 py-1 bg-purple-600 text-white rounded"
+                        className="px-4 py-1 bg-green-600 text-white rounded"
                     >
                         Add Session
                     </button>
@@ -135,7 +135,7 @@ const CampaignViewer = () => {
                     <h3 className="text-2xl font-semibold mb-4">NPCs</h3>
                     <button
                         onClick={() => setShowAddNPCModal(true)}
-                        className="px-4 py-1 bg-purple-600 text-white rounded"
+                        className="px-4 py-1 bg-green-600 text-white rounded"
                     >
                         Add NPC
                     </button>

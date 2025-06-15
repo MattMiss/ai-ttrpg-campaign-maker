@@ -32,51 +32,51 @@ const SessionEditModal = ({ session, onClose }: SessionEditModalProps) => {
 
     return (
         <ModalContainer onBGClicked={onClose}>
-                <h2 className="text-xl font-bold">
-                    Edit for Session {session.number}: {session.title}
-                </h2>
+            <h2 className="text-xl font-bold">
+                Edit for Session {session.number}: {session.title}
+            </h2>
 
-                <p className="mt-4 text-gray-700">{session.summary}</p>
+            <p className="mt-4 text-gray-700">{session.summary}</p>
 
-                <div className="mt-4">
-                    <strong className="block text-sm text-gray-600 mt-2">
-                        Events:
-                    </strong>
-                    <ul className="list-disc list-inside text-sm text-gray-800 mt-1">
-                        {session.events.map((event, i) => (
-                            <li key={i}>{event}</li>
-                        ))}
-                    </ul>
-                </div>
+            <div className="mt-4">
+                <strong className="block text-sm text-gray-600 mt-2">
+                    Events:
+                </strong>
+                <ul className="list-disc list-inside text-sm text-gray-800 mt-1">
+                    {session.events.map((event, i) => (
+                        <li key={i}>{event}</li>
+                    ))}
+                </ul>
+            </div>
 
-                <label className="block mt-4">
-                    <strong>Instruction for AI:</strong>
-                    <textarea
-                        value={instruction}
-                        onChange={(e) => setInstruction(e.target.value)}
-                        placeholder="e.g. Change this session to introduce an alien diplomat"
-                        className="w-full border p-2 mt-1"
-                        rows={4}
-                    />
-                </label>
+            <label className="block mt-4">
+                <strong>Instruction for AI:</strong>
+                <textarea
+                    value={instruction}
+                    onChange={(e) => setInstruction(e.target.value)}
+                    placeholder="e.g. Change this session to introduce an alien diplomat"
+                    className="w-full border p-2 mt-1"
+                    rows={4}
+                />
+            </label>
 
-                {error && <p className="text-red-600 text-sm">{error}</p>}
+            {error && <p className="text-red-600 text-sm">{error}</p>}
 
-                <div className="flex justify-end gap-3">
-                    <button
-                        onClick={onClose}
-                        className="px-4 py-2 bg-gray-300 rounded"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        onClick={handleSubmit}
-                        disabled={loading}
-                        className="px-4 py-2 bg-purple-600 text-white rounded disabled:opacity-50"
-                    >
-                        {loading ? "Submitting..." : "Apply AI Edit"}
-                    </button>
-                </div>
+            <div className="flex justify-end gap-3 mt-4">
+                <button
+                    onClick={onClose}
+                    className="px-4 py-2 bg-gray-600 text-white rounded"
+                >
+                    Cancel
+                </button>
+                <button
+                    onClick={handleSubmit}
+                    disabled={loading}
+                    className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
+                >
+                    {loading ? "Submitting..." : "Apply AI Edit"}
+                </button>
+            </div>
         </ModalContainer>
     );
 };
