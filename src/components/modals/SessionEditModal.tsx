@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { useCampaign } from "../context/CampaignContext";
-import type { CampaignSession } from "../types/Campaign";
+import { useCampaign } from "../../context/CampaignContext";
+import type { CampaignSession } from "../../types/Campaign";
+import ModalContainer from "./ModalContainer";
 
-interface Props {
+interface SessionEditModalProps {
     session: CampaignSession;
     onClose: () => void;
 }
 
-const SessionEditModal = ({ session, onClose }: Props) => {
+const SessionEditModal = ({ session, onClose }: SessionEditModalProps) => {
     const { handleSessionChange } = useCampaign();
     const [instruction, setInstruction] = useState("");
     const [loading, setLoading] = useState(false);
@@ -30,15 +31,14 @@ const SessionEditModal = ({ session, onClose }: Props) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-lg w-full max-w-xl shadow space-y-4">
+        <ModalContainer onBGClicked={onClose}>
                 <h2 className="text-xl font-bold">
                     Edit for Session {session.number}: {session.title}
                 </h2>
 
-                <p className="text-gray-700">{session.summary}</p>
+                <p className="mt-4 text-gray-700">{session.summary}</p>
 
-                <div>
+                <div className="mt-4">
                     <strong className="block text-sm text-gray-600 mt-2">
                         Events:
                     </strong>
@@ -77,8 +77,7 @@ const SessionEditModal = ({ session, onClose }: Props) => {
                         {loading ? "Submitting..." : "Apply AI Edit"}
                     </button>
                 </div>
-            </div>
-        </div>
+        </ModalContainer>
     );
 };
 

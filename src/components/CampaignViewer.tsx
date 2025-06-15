@@ -2,12 +2,12 @@
 import { useState } from "react";
 import { useCampaign } from "../context/CampaignContext";
 import type { CampaignSession, CampaignNPC } from "../types/Campaign";
-import NpcEditModal from "./NpcEditModal";
-import SessionEditModal from "./SessionEditModal";
+import NpcEditModal from "./modals/NpcEditModal";
+import SessionEditModal from "./modals/SessionEditModal";
 import { downloadTextFile } from "../utils/data.helper";
 
 const CampaignViewer = () => {
-    const { campaignResult } = useCampaign();
+    const { campaignResult, deleteCampaign } = useCampaign();
 	const [editingNpc, setEditingNpc] = useState<CampaignNPC | null>(null);
     const [editingSession, setEditingSession] = useState<CampaignSession | null>(null);
 
@@ -20,6 +20,20 @@ const CampaignViewer = () => {
                     {campaignResult.title}
                 </h2>
                 <p className="text-gray-700">{campaignResult.summary}</p>
+                <div className="mt-4 flex gap-4 md:gap-20">
+                    <button
+                        onClick={() => downloadTextFile(campaignResult)}
+                        className="flex-1 bg-blue-600 text-white px-4 py-2 rounded"
+                    >
+                        Download Campaign
+                    </button>
+                    <button
+                        onClick={deleteCampaign}
+                        className="flex-1 bg-red-500 text-white px-4 py-2 rounded"
+                    >
+                        Delete Campaign
+                    </button>
+                </div>
             </div>
 
             <div className="bg-white p-4 rounded shadow">
@@ -122,13 +136,6 @@ const CampaignViewer = () => {
                     ))}
                 </ul>
             </div>
-
-            <button
-                onClick={() => downloadTextFile(campaignResult)}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
-            >
-                Download Campaign Text File
-            </button>
 
             {editingNpc && (
                 <NpcEditModal

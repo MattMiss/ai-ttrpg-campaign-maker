@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { useCampaign } from "../context/CampaignContext";
-import type { CampaignNPC } from "../types/Campaign";
+import { useCampaign } from "../../context/CampaignContext";
+import type { CampaignNPC } from "../../types/Campaign";
+import ModalContainer from "./ModalContainer";
 
-interface Props {
+interface NpcEditModalProps {
     npc: CampaignNPC;
     onClose: () => void;
 }
 
-const NpcEditModal = ({ npc, onClose }: Props) => {
+const NpcEditModal = ({ npc, onClose }: NpcEditModalProps) => {
     const { handleNpcChange } = useCampaign();
     const [instruction, setInstruction] = useState("");
     const [loading, setLoading] = useState(false);
@@ -30,8 +31,7 @@ const NpcEditModal = ({ npc, onClose }: Props) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-lg w-full max-w-lg shadow">
+        <ModalContainer onBGClicked={onClose}>
                 <h2 className="text-xl font-bold">
                     Edit for NPC: {npc.name}
                 </h2>
@@ -76,8 +76,7 @@ const NpcEditModal = ({ npc, onClose }: Props) => {
                         {loading ? "Submitting..." : "Apply AI Edit"}
                     </button>
                 </div>
-            </div>
-        </div>
+        </ModalContainer>
     );
 };
 

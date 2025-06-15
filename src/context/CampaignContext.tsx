@@ -13,7 +13,7 @@ interface CampaignContextValue {
     campaigns: CampaignResult[];
     selectCampaign: (id: string) => void;
     generateCampaign: (input: CampaignInput) => Promise<void>;
-    clearCampaign: () => void;
+    deleteCampaign: () => void;
     handleNpcChange: (npcId: string, instruction: string) => void;
     handleSessionChange: (sessionId: string, instruction: string) => void;
 }
@@ -112,7 +112,7 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
         console.log(campaign)
     };
 
-    const clearCampaign = () => {
+    const deleteCampaign = () => {
         if (!selectedId) return;
 
         // Remove the specific campaign from localStorage
@@ -171,7 +171,7 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
                 loading,
                 error,
                 generateCampaign,
-                clearCampaign,
+                deleteCampaign,
                 campaigns,
                 selectedId,
                 selectCampaign,
