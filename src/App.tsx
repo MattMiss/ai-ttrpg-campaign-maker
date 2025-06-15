@@ -26,7 +26,7 @@ const App = () => {
         <>
             <Navbar currentView={view} onChangeView={setView} />
 
-            <div className="w-full p-6 max-w-3xl mx-auto">
+            <div className="pt-24 w-full p-6 max-w-3xl mx-auto">
                 {view === "create" && (
                     <>
                         {generating ? (
@@ -46,7 +46,7 @@ const App = () => {
                 )}
 
                 {view === "view" && (
-                    <div className="mt-20 ">
+                    <>
                         <CampaignSelector />
                         {campaignResult ? (
                             <CampaignViewer />
@@ -55,7 +55,7 @@ const App = () => {
                                 No campaign selected.
                             </p>
                         )}
-                    </div>
+                    </>
                 )}
             </div>
         </>
