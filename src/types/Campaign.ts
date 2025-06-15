@@ -39,6 +39,7 @@ export interface CampaignNPC {
     alive: boolean;
     notes?: string;
     firstAppearsIn?: number;
+    isBBEG?: boolean;
 }
 
 export interface CampaignResult {

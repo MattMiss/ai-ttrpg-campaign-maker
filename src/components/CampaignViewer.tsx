@@ -119,46 +119,104 @@ const CampaignViewer = () => {
 
             <div className="bg-white p-4 rounded shadow">
                 <h3 className="text-2xl font-semibold mb-4">NPCs</h3>
+
+                {/* Regular NPCs */}
                 <ul className="space-y-4">
-                    {campaignResult.npcs.map((npc: CampaignNPC) => (
-                        <li
-                            key={npc.id}
-                            className="border border-2 border-gray-400 p-3 rounded"
-                        >
-                            <div className="flex justify-between items-center">
-                                <p className="text-lg font-bold">
-                                    {npc.name} ({npc.role})
+                    {campaignResult.npcs
+                        .filter((npc) => !npc.isBBEG)
+                        .map((npc) => (
+                            <li
+                                key={npc.id}
+                                className="border border-2 border-gray-400 p-3 rounded"
+                            >
+                                <div className="flex justify-between items-center">
+                                    <p className="text-lg font-bold">
+                                        {npc.name} ({npc.role})
+                                    </p>
+                                    <button
+                                        onClick={() => setEditingNpc(npc)}
+                                        className="px-4 py-1 bg-purple-600 text-white rounded"
+                                    >
+                                        Edit
+                                    </button>
+                                </div>
+                                <p className="text-sm text-gray-600">
+                                    <strong>Appears in Session</strong>{" "}
+                                    {npc.firstAppearsIn}
                                 </p>
-                                <button
-                                    onClick={() => setEditingNpc(npc)}
-                                    className="px-4 py-1 bg-purple-600 text-white rounded"
-                                >
-                                    Edit
-                                </button>
-                            </div>
-                            <p className="text-sm text-gray-600">
-                                <strong>Appears in Session</strong>{" "}
-                                {npc.firstAppearsIn}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                                <strong>Status: </strong>
-                                {npc.alive ? (
-                                    <span className="text-green-600 font-bold">
-                                        Alive
-                                    </span>
-                                ) : (
-                                    <span className="text-red-600 font-bold">
-                                        Dead
-                                    </span>
+                                <p className="text-sm text-gray-600">
+                                    <strong>Status: </strong>
+                                    {npc.alive ? (
+                                        <span className="text-green-600 font-bold">
+                                            Alive
+                                        </span>
+                                    ) : (
+                                        <span className="text-red-600 font-bold">
+                                            Dead
+                                        </span>
+                                    )}
+                                </p>
+                                {npc.notes && (
+                                    <p className="text-sm text-gray-700 mt-1">
+                                        <strong>Notes:</strong> {npc.notes}
+                                    </p>
                                 )}
-                            </p>
-                            {npc.notes && (
-                                <p className="text-sm text-gray-700 mt-1">
-                                    <strong>Notes:</strong> {npc.notes}
+                            </li>
+                        ))}
+                </ul>
+            </div>
+
+            <div className="bg-white p-4 rounded shadow">
+                <h3 className="text-2xl font-semibold mb-4">
+                    Big Bad Evil Guy/Gal (BBEG)
+                </h3>
+
+                {/* Big Bad Evil Guy/Gal (BBEG) */}
+                <ul className="space-y-4">
+                    {campaignResult.npcs
+                        .filter((npc) => npc.isBBEG)
+                        .map((npc) => (
+                            <li
+                                key={npc.id}
+                                className="border-2 border-red-500 p-3 rounded"
+                            >
+                                <div className="flex justify-between items-center">
+                                    <p className="text-lg font-bold">
+                                        {npc.name} ({npc.role}){" "}
+                                        <span className="ml-2 text-xs bg-red-700 text-white px-2 py-0.5 rounded">
+                                            BBEG
+                                        </span>
+                                    </p>
+                                    <button
+                                        onClick={() => setEditingNpc(npc)}
+                                        className="px-4 py-1 bg-purple-600 text-white rounded"
+                                    >
+                                        Edit
+                                    </button>
+                                </div>
+                                <p className="text-sm text-gray-600">
+                                    <strong>Appears in Session</strong>{" "}
+                                    {npc.firstAppearsIn}
                                 </p>
-                            )}
-                        </li>
-                    ))}
+                                <p className="text-sm text-gray-600">
+                                    <strong>Status: </strong>
+                                    {npc.alive ? (
+                                        <span className="text-green-600 font-bold">
+                                            Alive
+                                        </span>
+                                    ) : (
+                                        <span className="text-red-600 font-bold">
+                                            Dead
+                                        </span>
+                                    )}
+                                </p>
+                                {npc.notes && (
+                                    <p className="text-sm text-gray-700 mt-1">
+                                        <strong>Notes:</strong> {npc.notes}
+                                    </p>
+                                )}
+                            </li>
+                        ))}
                 </ul>
             </div>
 

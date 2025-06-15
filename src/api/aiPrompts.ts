@@ -30,7 +30,14 @@ ${input.beats.map((b, i) => `${i + 1}. ${b}`).join("\n")}
 5. Define an array of NPCs:
  - Each must include an "id", "name", "role", "alive" (boolean), and "firstAppearsIn" (session number)
  - Optionally include a "notes" field for backstory, personality, or relationships
- - All NPCs listed in sessions must exist in this list
+ - **All NPCs listed in sessions must exist in this list**
+ - **NPC IDs must follow the format "npc-1", "npc-2", etc., and must not change even if their names or roles are edited later**
+
+6. At least one NPC must be a central villain or antagonist (BBEG - Big Bad Evil Guy/Gal/Group). This NPC must:
+- Have "isBBEG": true in their JSON object
+- Be clearly described in their "role"
+- Appear in at least one session
+- Be included in the npcs array and referenced by ID in relevant sessions
 
 ### Output Format:
 {
@@ -48,12 +55,13 @@ ${input.beats.map((b, i) => `${i + 1}. ${b}`).join("\n")}
 ],
 "npcs": [
   {
-    "id": string,
+    "id": string, // e.g., "npc-1"
     "name": string,
     "role": string,
     "alive": boolean,
     "firstAppearsIn": number,
-    "notes"?: string
+    "notes"?: string.
+    "isBBEG"?: boolean,
   }
 ]
 }
@@ -68,6 +76,7 @@ export const generateNpcEditPrompt = (
     instruction: string
 ): string => {
     const jsonCampaign = JSON.stringify(campaign, null, 2);
+    const isBbeg = campaign.npcs.find((n) => n.id === npcId)?.isBBEG ?? false;
 
     return `
 You are an AI campaign editor for a TTRPG.
@@ -75,20 +84,29 @@ You are an AI campaign editor for a TTRPG.
 Below is the full campaign data:
 ${jsonCampaign}
 
-Focus on the NPC with ID "${npcId}".
+Focus on the NPC with ID "${npcId}". This NPC is${
+        isBbeg ? "" : " not"
+    } the Big Bad Evil Guy (BBEG).
 
 Instruction:
 ${instruction}
 
-Update the campaign based on this change. If necessary, update future sessions, remove or replace events involving this NPC, or adjust their status or role.
+Update the campaign based on this change. If necessary:
+- Update future sessions to reflect changes involving this NPC
+- Remove or replace events they are no longer part of
+- Adjust their role, status, or other relevant fields
+- If the NPC is the BBEG, ensure their central story impact is reflected
+- Update the overall campaign **summary** if this NPC plays a significant role in the story arc
 
-Return only updated sessions and NPCs in valid JSON format:
+Return only the updated parts of the campaign in valid JSON format:
 {
-  "sessions": [ ... updated sessions only ... ],
-  "npcs": [ ... updated NPC entry only ... ]
+"summary": "Updated campaign summary if needed",
+"sessions": [ ... updated sessions only ... ],
+"npcs": [ ... updated NPC entry only ... ]
 }
 `.trim();
 };
+
 
 export const generateSessionEditPrompt = (
     campaign: CampaignResult,

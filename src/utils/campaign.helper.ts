@@ -8,6 +8,7 @@ import type {
 interface PartialUpdate {
     sessions?: CampaignSession[];
     npcs?: CampaignNPC[];
+    summary?: string;
 }
 
 export const mergeCampaignUpdate = (
@@ -28,6 +29,7 @@ export const mergeCampaignUpdate = (
 
     return {
         ...original,
+        summary: update.summary ?? original.summary,
         sessions: Array.from(sessionMap.values()).sort(
             (a, b) => a.number - b.number
         ),
