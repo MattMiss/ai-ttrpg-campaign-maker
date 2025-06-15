@@ -1,6 +1,6 @@
 // App.tsx
 import { useState } from "react";
-import CampaignSelector from "./components/CampaignDropdown";
+import CampaignSelector from "./components/CampaignSelector";
 import CampaignForm from "./components/CampaignForm";
 import CampaignViewer from "./components/CampaignViewer";
 import Navbar, {type ViewType } from "./components/Navbar";
@@ -38,7 +38,7 @@ const App = () => {
                                     onClick={clearCampaign}
                                     className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
                                 >
-                                    Reset Campaign
+                                    Delete Campaign
                                 </button>
                             </>
                         ) : (

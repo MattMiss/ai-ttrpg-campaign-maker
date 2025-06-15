@@ -17,13 +17,12 @@
   width: 100%;
 }
 
-
 body {
   margin: 0;
   min-width: 400px;
   min-height: 100vh;
 }
 
-button:hover {
+button:hover, select {
   cursor: pointer;
 }

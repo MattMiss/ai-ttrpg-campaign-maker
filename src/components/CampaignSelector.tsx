@@ -8,7 +8,7 @@ const CampaignSelector = () => {
     return (
         <div className="bg-white rounded p-4 mb-4">
             <label className="block font-semibold mb-1">
-                Load Existing Campaign:
+                Load Campaign:
             </label>
             <select
                 value={selectedId ?? ""}
