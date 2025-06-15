@@ -126,12 +126,20 @@ Focus on the session with ID "${sessionId}".
 Instruction:
 ${instruction}
 
-Make necessary changes to that session and adjust any related NPCs if needed. Maintain continuity in the overall story.
+Make all necessary changes to that session, including:
+- Updating the session "summary" to reflect any changes to events or NPCs
+- Ensuring the session "npcs" list only includes NPCs actively involved in that session's events
+- Adjusting any related NPCs if their appearance or role changes
+- If the overall campaign summary needs to be revised to reflect major changes, return an updated version
 
-Return only updated sessions and NPCs in valid JSON format:
+Maintain continuity in the overall story.
+
+Return only updated sessions, affected NPCs, and a new campaign summary (if it changed) in valid JSON format:
+
 {
-  "sessions": [ ... updated session only ... ],
-  "npcs": [ ... any affected NPCs ... ]
+"summary"?: string,            // Include only if the campaign summary changed
+"sessions": [ ... updated session only ... ],
+"npcs": [ ... any affected NPCs ... ]
 }
 `.trim();
 };
