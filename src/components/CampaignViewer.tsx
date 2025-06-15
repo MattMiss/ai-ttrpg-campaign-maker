@@ -5,11 +5,13 @@ import type { CampaignSession, CampaignNPC } from "../types/Campaign";
 import NpcEditModal from "./modals/NpcEditModal";
 import SessionEditModal from "./modals/SessionEditModal";
 import { downloadTextFile } from "../utils/data.helper";
+import DeleteCampaignModal from "./modals/DeleteCampaignModal";
 
 const CampaignViewer = () => {
     const { campaignResult, deleteCampaign } = useCampaign();
 	const [editingNpc, setEditingNpc] = useState<CampaignNPC | null>(null);
     const [editingSession, setEditingSession] = useState<CampaignSession | null>(null);
+    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
     if (!campaignResult) return null;
 
@@ -28,7 +30,7 @@ const CampaignViewer = () => {
                         Download Campaign
                     </button>
                     <button
-                        onClick={deleteCampaign}
+                        onClick={() => setShowDeleteModal(true)}
                         className="flex-1 bg-red-500 text-white px-4 py-2 rounded"
                     >
                         Delete Campaign
@@ -148,6 +150,14 @@ const CampaignViewer = () => {
                 <SessionEditModal
                     session={editingSession}
                     onClose={() => setEditingSession(null)}
+                />
+            )}
+
+            {showDeleteModal && (
+                <DeleteCampaignModal 
+                    campaignTitle={campaignResult.title}
+                    onDelete={deleteCampaign}
+                    onClose={() => setShowDeleteModal(false)}
                 />
             )}
         </div>
