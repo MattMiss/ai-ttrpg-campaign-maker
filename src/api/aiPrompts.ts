@@ -91,18 +91,23 @@ Focus on the NPC with ID "${npcId}". This NPC is${
 Instruction:
 ${instruction}
 
-Update the campaign based on this change. If necessary:
-- Update future sessions to reflect changes involving this NPC
-- Remove or replace events they are no longer part of
-- Adjust their role, status, or other relevant fields
-- If the NPC is the BBEG, ensure their central story impact is reflected
-- Update the overall campaign **summary** if this NPC plays a significant role in the story arc
+Apply the instruction to the campaign. You may:
+- Update the NPC’s attributes (name, role, alive, etc.)
+- Remove this NPC completely (if instructed)
+- Update sessions where this NPC is involved
+- Update the campaign summary if this NPC affects the main arc
+
+If the NPC is **deleted**, you must:
+- Omit them from the "npcs" array
+- Remove references to their ID from all session "npcs" arrays
+- include its ID in a "deletedNpcId" field.
 
 DO NOT include any explanation or formatting text before or after the JSON. Return only the updated parts of the campaign in valid JSON format:
 {
 "summary": "Updated campaign summary if needed",
 "sessions": [ ... updated sessions only ... ],
-"npcs": [ ... updated NPC entry only ... ]
+"npcs": [ ... updated NPC entry only ... ],
+"deletedNpcId"?: string // Include if the NPC was removed
 }
 `.trim();
 };
@@ -199,5 +204,48 @@ DO NOT include any explanation or formatting text before or after the JSON. Retu
 "sessions": [ ...new and updated sessions... ],
 "npcs"?: [ ...new or modified NPCs... ]
 }
+`.trim();
+};
+
+
+export const generateAddNpcPrompt = (
+    campaign: CampaignResult,
+    instruction: string
+): string => {
+    const jsonCampaign = JSON.stringify(campaign, null, 2);
+
+    return `
+You are an AI campaign editor for a TTRPG.
+
+Below is the current campaign data:
+${jsonCampaign}
+
+Instruction:
+${instruction}
+
+Your task is to add a **new NPC** to the campaign based on the user's instruction.
+
+### Requirements:
+- Create a new NPC with:
+  - "id": use the next available ID in the format "npc-#", continuing the existing sequence
+  - "name": generate a fitting name
+  - "role": describe their job, personality, or importance in the story
+  - "alive": boolean
+  - "firstAppearsIn": session number (decide based on story context or user instruction)
+  - Optional: "notes" for personality, relationships, or appearance
+  - Optional: "isBBEG": true if the user intends this NPC to be a main antagonist
+- Modify **only the sessions** where this NPC appears. Add the NPC's ID to the session's "npcs" array and mention them in the "events" or "summary" if appropriate.
+- If the campaign summary needs to reflect this change, return a new summary.
+
+### Output:
+Respond ONLY with valid JSON in this format:
+
+{
+  "summary"?: string,
+  "sessions": [ ... any updated sessions ... ],
+  "npcs": [ ...new NPC only... ]
+}
+
+DO NOT include any explanation or markdown. Only return the JSON.
 `.trim();
 };

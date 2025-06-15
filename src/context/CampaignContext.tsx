@@ -7,6 +7,7 @@ import {
 } from "react";
 import type { CampaignInput, CampaignResult } from "../types/Campaign";
 import {
+    addNewNPCWithGroq,
     addNewSessionWithGroq,
     getCampaignFromGroq,
     getNpcEditFromGroq,
@@ -29,9 +30,14 @@ interface CampaignContextValue {
     ) => Promise<void>;
     deleteCampaign: () => void;
     handleTitleSummaryUpdate: (newTitle: string, newSummary: string) => void;
+    handleAddNpc: (instruction: string) => void;
     handleNpcChange: (npcId: string, instruction: string) => void;
     handleSessionChange: (sessionId: string, instruction: string) => void;
-    handleAddSession: (anchorSessionId: string, instruction: string, position: "before" | "after") => void;
+    handleAddSession: (
+        anchorSessionId: string,
+        instruction: string,
+        position: "before" | "after"
+    ) => void;
 }
 
 const CampaignContext = createContext<CampaignContextValue | undefined>(
@@ -177,6 +183,16 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem("selectedCampaignId");
     };
 
+    const handleAddNpc = async (instruction: string) => {
+        if (!campaignResult) return;
+
+        const update = await addNewNPCWithGroq(campaignResult, instruction);
+        const merged = mergeCampaignUpdate(campaignResult, update);
+
+        setCampaignResult(merged);
+        localStorage.setItem(`campaign_${merged.id}`, JSON.stringify(merged));
+    };
+
     const handleNpcChange = async (npcId: string, instruction: string) => {
         if (!campaignResult) return;
 
@@ -240,6 +256,7 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
                 selectedId,
                 selectCampaign,
                 handleTitleSummaryUpdate,
+                handleAddNpc,
                 handleNpcChange,
                 handleSessionChange,
                 handleAddSession,

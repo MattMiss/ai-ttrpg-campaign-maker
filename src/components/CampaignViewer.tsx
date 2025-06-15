@@ -9,9 +9,12 @@ import DeleteCampaignModal from "./modals/DeleteCampaignModal";
 import DownloadCampaignModal from "./modals/DownloadCampaignModal";
 import EditTitleAndSummaryModal from "./modals/EditTitleAndSummaryModal";
 import AddSessionModal from "./modals/AddSessionModal";
+import AddNpcModal from "./modals/AddNPCModal";
 
 const CampaignViewer = () => {
     const { campaignResult, deleteCampaign, handleTitleSummaryUpdate } = useCampaign();
+    const [showAddNPCModal, setShowAddNPCModal] =
+        useState<boolean>(false);
 	const [editingNpc, setEditingNpc] = useState<CampaignNPC | null>(null);
     const [editingSession, setEditingSession] = useState<CampaignSession | null>(null);
     const [showAddSessionModal, setShowAddSessionModal] = useState<boolean>(false);
@@ -128,7 +131,15 @@ const CampaignViewer = () => {
             </div>
 
             <div className="bg-white p-4 rounded shadow">
-                <h3 className="text-2xl font-semibold mb-4">NPCs</h3>
+                <div className="flex justify-between items-center">
+                    <h3 className="text-2xl font-semibold mb-4">NPCs</h3>
+                    <button
+                        onClick={() => setShowAddNPCModal(true)}
+                        className="px-4 py-1 bg-purple-600 text-white rounded"
+                    >
+                        Add NPC
+                    </button>
+                </div>
 
                 {/* Regular NPCs */}
                 <ul className="space-y-4">
@@ -229,6 +240,10 @@ const CampaignViewer = () => {
                         ))}
                 </ul>
             </div>
+
+            {showAddNPCModal && (
+                <AddNpcModal onClose={() => setShowAddNPCModal(false)} />
+            )}
 
             {editingNpc && (
                 <NpcEditModal
