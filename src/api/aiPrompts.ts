@@ -2,25 +2,64 @@ import type { CampaignInput, CampaignResult } from "../types/Campaign";
 
 export const generateCampaignPrompt = (input: CampaignInput): string => {
     return `
-Create a TTRPG campaign in the ${input.genre} genre.
+You are an AI Game Master creating a structured TTRPG campaign.
 
-The campaign should be ${input.length} sessions long.
-
-Story Beats:
+**Genre:** ${input.genre}  
+**Length:** ${input.length} sessions  
+**Story Beats:**  
 ${input.beats.map((b, i) => `${i + 1}. ${b}`).join("\n")}
 
-Respond in JSON format with:
+### Requirements:
+
+1. Structure the story across ${
+        input.length
+    } sessions with a continuous narrative.
+2. Ensure the sessions reflect the provided story beats in order.
+3. Introduce NPCs organically throughout the sessions and maintain consistency.
+4. Each session must include:
+ - A unique "id" (e.g., "session1")
+ - A session "number" (starting at 1)
+ - A "title"
+ - A **summary that clearly explains the major events in that session**.  
+   - The summary should mention all key events, what decisions or conflicts happened, and their outcomes.
+   - Avoid overly short or vague summaries — each should be at least 3–5 sentences.
+   - **If an NPC appears in the summary, use their full name, not their ID**
+ - A list of short "events" (as strings)
+ - A list of relevant NPC IDs who are actively involved in the events of this session. Only include NPCs who appear or take part in the described events. Do not include NPCs who are not mentioned in the session summary or events.
+
+5. Define an array of NPCs:
+ - Each must include an "id", "name", "role", "alive" (boolean), and "firstAppearsIn" (session number)
+ - Optionally include a "notes" field for backstory, personality, or relationships
+ - All NPCs listed in sessions must exist in this list
+
+### Output Format:
 {
-  "title": string,
-  "summary": string,
-  "sessions": [
-    { "id": string, "number": number, "title": string, "summary": string, "events": string[], "npcs": string[] }
-  ],
-  "npcs": [
-    { "id": string, "name": string, "role": string, "alive": boolean, "firstAppearsIn": number, "notes"?: string }
-  ]
+"title": string,
+"summary": string,
+"sessions": [
+  {
+    "id": string,
+    "number": number,
+    "title": string,
+    "summary": string, // rich, detailed, story-driven
+    "events": string[],
+    "npcs": string[] // IDs of NPCs actually involved in this session's events
+  }
+],
+"npcs": [
+  {
+    "id": string,
+    "name": string,
+    "role": string,
+    "alive": boolean,
+    "firstAppearsIn": number,
+    "notes"?: string
+  }
+]
 }
-  `.trim();
+
+Respond only with valid JSON.
+`.trim();
 };
 
 export const generateNpcEditPrompt = (
