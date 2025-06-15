@@ -14,6 +14,7 @@ interface CampaignContextValue {
     selectCampaign: (id: string) => void;
     generateCampaign: (input: CampaignInput) => Promise<void>;
     deleteCampaign: () => void;
+    handleTitleSummaryUpdate: (newTitle: string, newSummary: string) => void;
     handleNpcChange: (npcId: string, instruction: string) => void;
     handleSessionChange: (sessionId: string, instruction: string) => void;
 }
@@ -112,6 +113,29 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
         console.log(campaign)
     };
 
+    const handleTitleSummaryUpdate = (newTitle: string, newSummary: string) => {
+        if (!selectedId) return;
+
+        const raw = localStorage.getItem(`campaign_${selectedId}`);
+        if (!raw) return;
+
+        const existing: CampaignResult = JSON.parse(raw);
+
+        const updated: CampaignResult = {
+            ...existing,
+            title: newTitle,
+            summary: newSummary,
+        };
+
+        // Update localStorage
+        localStorage.setItem(`campaign_${selectedId}`, JSON.stringify(updated));
+
+        setCampaignResult(updated);
+        setCampaigns((prev) =>
+            prev.map((c) => (c.id === selectedId ? updated : c))
+        );
+    };
+
     const deleteCampaign = () => {
         if (!selectedId) return;
 
@@ -175,6 +199,7 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
                 campaigns,
                 selectedId,
                 selectCampaign,
+                handleTitleSummaryUpdate,
                 handleNpcChange,
                 handleSessionChange
             }}

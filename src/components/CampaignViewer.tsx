@@ -7,13 +7,15 @@ import SessionEditModal from "./modals/SessionEditModal";
 import { downloadTextFile } from "../utils/data.helper";
 import DeleteCampaignModal from "./modals/DeleteCampaignModal";
 import DownloadCampaignModal from "./modals/DownloadCampaignModal";
+import EditTitleAndSummaryModal from "./modals/EditTitleAndSummaryModal";
 
 const CampaignViewer = () => {
-    const { campaignResult, deleteCampaign } = useCampaign();
+    const { campaignResult, deleteCampaign, handleTitleSummaryUpdate } = useCampaign();
 	const [editingNpc, setEditingNpc] = useState<CampaignNPC | null>(null);
     const [editingSession, setEditingSession] = useState<CampaignSession | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
     const [showDownloadModal, setShowDownloadModal] = useState<boolean>(false);
+    const [showEditTitleSummaryModal, setShowEditTitleSummaryModal] = useState<boolean>(false)
 
 
     if (!campaignResult) return null;
@@ -23,12 +25,25 @@ const CampaignViewer = () => {
         setShowDownloadModal(false);
     }
 
+    const handleEditTitleSummary = (newTitle: string, newSummary: string) => {
+        handleTitleSummaryUpdate(newTitle, newSummary);
+        setShowEditTitleSummaryModal(false);
+    }
+
     return (
         <div className="space-y-8 mt-6">
             <div className="bg-white p-4 rounded shadow">
-                <h2 className="text-3xl font-bold mb-2">
-                    {campaignResult.title}
-                </h2>
+                <div className="flex justify-between items-center">
+                    <h2 className="text-3xl font-bold mb-2">
+                        {campaignResult.title}
+                    </h2>
+                    <button
+                        onClick={() => setShowEditTitleSummaryModal(true)}
+                        className="px-4 py-1 bg-purple-600 text-white rounded"
+                    >
+                        Edit
+                    </button>
+                </div>
                 <p className="text-gray-700">{campaignResult.summary}</p>
                 <div className="mt-4 flex gap-4 md:gap-20">
                     <button
@@ -54,7 +69,7 @@ const CampaignViewer = () => {
                             key={session.id}
                             className="border border-2 border-gray-400 p-3 rounded"
                         >
-                            <div className="flex justify-between">
+                            <div className="flex justify-between items-center">
                                 <h4 className="text-xl font-bold">
                                     Session {session.number}: {session.title}
                                 </h4>
@@ -110,7 +125,7 @@ const CampaignViewer = () => {
                             key={npc.id}
                             className="border border-2 border-gray-400 p-3 rounded"
                         >
-                            <div className="flex justify-between">
+                            <div className="flex justify-between items-center">
                                 <p className="text-lg font-bold">
                                     {npc.name} ({npc.role})
                                 </p>
@@ -174,6 +189,15 @@ const CampaignViewer = () => {
                     campaignTitle={campaignResult.title}
                     onDownload={handleDownloadCampaign}
                     onClose={() => setShowDownloadModal(false)}
+                />
+            )}
+
+            {showEditTitleSummaryModal && (
+                <EditTitleAndSummaryModal
+                    currentTitle={campaignResult.title}
+                    currentSummary={campaignResult.summary}
+                    onSave={handleEditTitleSummary}
+                    onClose={() => setShowEditTitleSummaryModal(false)}
                 />
             )}
         </div>
