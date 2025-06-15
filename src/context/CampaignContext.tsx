@@ -1,18 +1,31 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import {
+    createContext,
+    useContext,
+    useState,
+    useEffect,
+    type ReactNode,
+} from "react";
 import type { CampaignInput, CampaignResult } from "../types/Campaign";
-import { getCampaignFromGroq, getNpcEditFromGroq, getSessionEditFromGroq } from "../api/groqService";
+import {
+    getCampaignFromGroq,
+    getNpcEditFromGroq,
+    getSessionEditFromGroq,
+} from "../api/groqService";
 import { CAMPAIGN_DATA_KEY, CAMPAIGN_LIST_KEY } from "../utils/storage.helper";
 import { mergeCampaignUpdate } from "../utils/campaign.helper";
 
 interface CampaignContextValue {
     input: CampaignInput | null;
     campaignResult: CampaignResult | null;
-    loading: boolean;
+    generating: boolean;
     error: string | null;
     selectedId: string | null;
     campaigns: CampaignResult[];
     selectCampaign: (id: string) => void;
-    generateCampaign: (input: CampaignInput) => Promise<void>;
+    generateCampaign: (
+        input: CampaignInput,
+        onSuccess?: () => void
+    ) => Promise<void>;
     deleteCampaign: () => void;
     handleTitleSummaryUpdate: (newTitle: string, newSummary: string) => void;
     handleNpcChange: (npcId: string, instruction: string) => void;
@@ -43,7 +56,7 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
             return stored ? JSON.parse(stored) : null;
         }
     );
-    const [loading, setLoading] = useState(false);
+    const [generating, setGenerating] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -65,8 +78,11 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
         }
     }, []);
 
-    const generateCampaign = async (inputData: CampaignInput) => {
-        setLoading(true);
+    const generateCampaign = async (
+        inputData: CampaignInput,
+        onSuccess?: () => void
+    ) => {
+        setGenerating(true);
         setError(null);
         setInput(inputData);
 
@@ -95,11 +111,15 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
             localStorage.setItem("selectedCampaignId", id);
 
             setCampaignResult(fullCampaign);
+
+            if (onSuccess) {
+                onSuccess();
+            }
         } catch (err) {
             console.error(err);
             setError("Failed to generate campaign.");
         } finally {
-            setLoading(false);
+            setGenerating(false);
         }
     };
 
@@ -110,7 +130,7 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
             setCampaignResult(campaign);
             localStorage.setItem("selectedCampaignId", id);
         }
-        console.log(campaign)
+        console.log(campaign);
     };
 
     const handleTitleSummaryUpdate = (newTitle: string, newSummary: string) => {
@@ -192,7 +212,7 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
             value={{
                 input,
                 campaignResult,
-                loading,
+                generating,
                 error,
                 generateCampaign,
                 deleteCampaign,
@@ -201,7 +221,7 @@ export const CampaignProvider = ({ children }: { children: ReactNode }) => {
                 selectCampaign,
                 handleTitleSummaryUpdate,
                 handleNpcChange,
-                handleSessionChange
+                handleSessionChange,
             }}
         >
             {children}

@@ -26,7 +26,7 @@ const Navbar = ({ currentView, onChangeView }: Props) => {
                     onClick={() => onChangeView("view")}
                     className={`px-4 py-2 rounded ${isActive("view")}`}
                 >
-                    View/Edit Campaign
+                    My Campaigns
                 </button>
             </div>
         </nav>

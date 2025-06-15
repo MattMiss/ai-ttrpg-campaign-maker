@@ -53,7 +53,7 @@ const CampaignForm = ({ onSubmit }: Props) => {
 
     const handleChangeBeat = (index: number, value: string) => {
         const updated = [...beats];
-        updated[index] = value.trim();
+        updated[index] = value;
         setBeats(updated);
     };
 
