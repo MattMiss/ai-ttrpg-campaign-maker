@@ -6,14 +6,22 @@ import NpcEditModal from "./modals/NpcEditModal";
 import SessionEditModal from "./modals/SessionEditModal";
 import { downloadTextFile } from "../utils/data.helper";
 import DeleteCampaignModal from "./modals/DeleteCampaignModal";
+import DownloadCampaignModal from "./modals/DownloadCampaignModal";
 
 const CampaignViewer = () => {
     const { campaignResult, deleteCampaign } = useCampaign();
 	const [editingNpc, setEditingNpc] = useState<CampaignNPC | null>(null);
     const [editingSession, setEditingSession] = useState<CampaignSession | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+    const [showDownloadModal, setShowDownloadModal] = useState<boolean>(false);
+
 
     if (!campaignResult) return null;
+
+    const handleDownloadCampaign = (filename: string) => {
+        downloadTextFile(campaignResult, filename);
+        setShowDownloadModal(false);
+    }
 
     return (
         <div className="space-y-8 mt-6">
@@ -24,7 +32,7 @@ const CampaignViewer = () => {
                 <p className="text-gray-700">{campaignResult.summary}</p>
                 <div className="mt-4 flex gap-4 md:gap-20">
                     <button
-                        onClick={() => downloadTextFile(campaignResult)}
+                        onClick={() => setShowDownloadModal(true)}
                         className="flex-1 bg-blue-600 text-white px-4 py-2 rounded"
                     >
                         Download Campaign
@@ -154,10 +162,18 @@ const CampaignViewer = () => {
             )}
 
             {showDeleteModal && (
-                <DeleteCampaignModal 
+                <DeleteCampaignModal
                     campaignTitle={campaignResult.title}
                     onDelete={deleteCampaign}
                     onClose={() => setShowDeleteModal(false)}
+                />
+            )}
+
+            {showDownloadModal && (
+                <DownloadCampaignModal
+                    campaignTitle={campaignResult.title}
+                    onDownload={handleDownloadCampaign}
+                    onClose={() => setShowDownloadModal(false)}
                 />
             )}
         </div>

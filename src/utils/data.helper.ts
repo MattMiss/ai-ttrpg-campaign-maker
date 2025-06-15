@@ -47,9 +47,7 @@ ${npcText}
 `.trim();
 };
 
-export const downloadTextFile = (campaign: CampaignResult) => {
-    const defaultName = `${campaign.title}.txt`;
-    const filename = prompt("Enter a filename:", defaultName);
+export const downloadTextFile = (campaign: CampaignResult, filename: string) => {
 
     if (!filename) return; // User cancelled
 
