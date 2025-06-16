@@ -12,7 +12,7 @@ import {
     getCampaignFromGroq,
     getNpcEditFromGroq,
     getSessionEditFromGroq,
-} from "../api/groqService";
+} from "../api/groq/groqService";
 import { CAMPAIGN_DATA_KEY, CAMPAIGN_LIST_KEY } from "../utils/storage.helper";
 import { mergeCampaignUpdate } from "../utils/campaign.helper";
 
