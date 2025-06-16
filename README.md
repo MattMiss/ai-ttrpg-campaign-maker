@@ -10,9 +10,10 @@ An AI-powered tool to create, edit, and manage structured TTRPG (Tabletop Role-P
 
 - Generate full campaigns from story beats and genre
 - Add, edit, or remove sessions and NPCs with natural language
-- Automatically update summaries and continuity
+- Automatically update session summaries and NPCs when needed
 - Includes support for BBEGs (Big Bad Evil Guys/Gals)
 - Local storage saves progress between sessions
+- Download campaigns as a text file
 - Clean React UI with modals for edits
 
 <br>
@@ -30,6 +31,15 @@ An AI-powered tool to create, edit, and manage structured TTRPG (Tabletop Role-P
 <br>
 
 ---
+
+## AI Prompts & GROQ
+
+- All prompts used in the project are located in the folder ```src/api/prompts/```
+- All GROQ API function calls are located in ```src/api/groq/```
+
+---
+
+<br>
 
 ## Setup Instructions
 
