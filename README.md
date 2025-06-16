@@ -92,7 +92,7 @@ Example:
    - A full list of `sessions` with events, summaries, and involved NPCs
    - A complete list of `NPCs`, including one BBEG
 
-![Create Campaign Image](https://i.imgur.com/D181qdV.png)
+![Create Campaign Image](https://i.imgur.com/TbIswPq.png)
 
 ---
 
@@ -105,7 +105,7 @@ Click **My Campaigns** to explore your saved campaigns (stored in localStorage).
 - Each session shows its number, title, summary, and involved NPCs
 - A separate section listing all created NPCs
 
-![View Created Campaign Image](https://i.imgur.com/M0OrBEw.png)
+![View Created Campaign Image](https://i.imgur.com/v91qulU.png)
 
 ---
 
@@ -121,7 +121,7 @@ You can edit any part of the campaign using natural-language instructions. The A
 
 **Prompt type used:** `generateSessionEditPrompt`
 
-![Edit a Session Image](https://i.imgur.com/8lZ3b6a.png)
+![Edit a Session Image](https://i.imgur.com/pRlo8iA.png)
 
 
 #### ➕ Add a New Session
@@ -133,7 +133,7 @@ You can edit any part of the campaign using natural-language instructions. The A
 
 **Prompt type used:** `generateAddSessionPrompt`
 
-![Add a New Session Image](https://i.imgur.com/ETPEGc4.png)
+![Add a New Session Image](https://i.imgur.com/qDthuBP.png)
 
 
 #### 🧍Edit an NPC
@@ -147,7 +147,7 @@ You can edit any part of the campaign using natural-language instructions. The A
 
 **Prompt type used:** `generateNpcEditPrompt`
 
-![Edit an NPC Image](https://i.imgur.com/FTzdx9p.png)
+![Edit an NPC Image](https://i.imgur.com/FPunIpP.png)
 
 
 #### Add a New NPC
@@ -157,7 +157,7 @@ You can edit any part of the campaign using natural-language instructions. The A
 
 **Prompt type used:** `generateAddNpcPrompt`
 
-![Add an NPC Image](https://i.imgur.com/W2MajTN.png)
+![Add an NPC Image](https://i.imgur.com/WreXR88.png)
 
 #### Deleting Sessions or NPCs
 
@@ -173,8 +173,8 @@ You can edit any part of the campaign using natural-language instructions. The A
   - Enter a filename for the download
   - Download the campaign as a text file
 
-![Edit Download Filename Image](https://i.imgur.com/cgRYLOk.png)
-![Downloaded Text File Image](https://i.imgur.com/hBiSwTD.png)
+![Edit Download Filename Image](https://i.imgur.com/qIXmuGA.png)
+![Downloaded Text File Image](https://i.imgur.com/duHp4qr.png)
 
 <br>
 
