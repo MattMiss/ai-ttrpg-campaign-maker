@@ -37,9 +37,10 @@ An AI-powered tool to create, edit, and manage structured TTRPG (Tabletop Role-P
 - All prompts used in the project are located in the folder ```src/api/prompts/```
 - All GROQ API function calls are located in ```src/api/groq/```
 
+<br>
+
 ---
 
-<br>
 
 ## Setup Instructions
 
