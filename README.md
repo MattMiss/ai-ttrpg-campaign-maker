@@ -4,6 +4,8 @@ An AI-powered tool to create, edit, and manage structured TTRPG (Tabletop Role-P
 
 <br>
 
+[Youtube Demo](https://www.youtube.com/watch?v=IiKkpMsiRRg)
+
 ---
 
 ## Features
